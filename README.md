@@ -1,113 +1,121 @@
-# AI Problem Solving — Map Coloring (CSP)
+# 🗺️ AI Problem Solving — Constraint Satisfaction Problem (CSP) Map Coloring
 
-## Problem Statement
-In a map coloring scenario, different regions on a map must be colored such that **no two adjacent regions share the same color**. The user can input regions and their neighboring relationships through an interactive GUI, and the system assigns colors to each region while satisfying all constraints.
+<div align="center">
 
----
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![HTML5 Canvas](https://img.shields.io/badge/Web-HTML5_Canvas-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+[![Tkinter](https://img.shields.io/badge/GUI-Tkinter-3776AB?style=for-the-badge)](https://docs.python.org/3/library/tkinter.html)
+[![AI CSP](https://img.shields.io/badge/AI_Algorithm-Backtracking_CSP-blueviolet?style=for-the-badge)](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
-## Algorithm Used
-**Constraint Satisfaction Problem (CSP) — Backtracking Search**
+**An interactive Constraint Satisfaction Problem (CSP) solver that colors map regions without neighboring color collisions, featuring Backtracking Search, Degree Heuristics, Tkinter desktop GUI, and interactive HTML5 Web Canvas.**
 
-### How it works:
-1. Each **region** is treated as a variable
-2. The **available colors** form the domain
-3. The **constraint** is: no two adjacent regions can share the same color
-4. The solver uses **backtracking** with a **degree heuristic** (most constrained region first)
-5. If no color works for a region, it backtracks to the previous region and tries a different color
-
-### Smart Hint System:
-- Computes the **chromatic lower bound** (minimum colors needed)
-- Computes the **safe upper bound** (max degree + 1)
-- Warns the user if they have selected too few colors before solving
-
-### Four Color Theorem:
-Any map can be colored using at most **4 colors** such that no two adjacent regions share the same color.
+</div>
 
 ---
 
-## Technologies Used
-- **Python 3**
-- **Streamlit** — interactive web-based GUI
-- **NetworkX** — graph construction
-- **Matplotlib** — graph visualization
+## 📌 Problem Formulation
+
+The **Map Coloring Problem** is a foundational Constraint Satisfaction Problem (CSP) in Artificial Intelligence:
+- **Variables ($V$)**: Distinct planar map regions / political boundaries $\{R_1, R_2, \dots, R_n\}$.
+- **Domains ($D$)**: Set of available colors $\{C_1, C_2, \dots, C_k\}$ (governed by the **Four Color Theorem**, establishing that at most 4 colors suffice for any planar graph).
+- **Constraints ($C$)**: For every pair of adjacent regions $(R_i, R_j) \in \text{Edges}$, $\text{Color}(R_i) \neq \text{Color}(R_j)$.
 
 ---
 
-## Folder Structure
-```
-Problem5_MapColoring/
-│
-├── app.py          ← Main Streamlit application
-├── README.md       ← Project documentation
+## 🏗️ Algorithmic Mechanics
+
+```mermaid
+flowchart TD
+    A["🗺️ Define Map Topology (Regions & Adjacency Graph)"] --> B["🎨 Select Color Palette Domain"]
+    B --> C["🔍 Select Unassigned Variable (Degree Heuristic)"]
+    C --> D{"🛡️ Check Color Validity Against Neighbors"}
+    D -->|"Valid"| E["✏️ Assign Color to Current Region"]
+    E --> F{"🏁 All Regions Assigned?"}
+    F -->|"Yes"| G["🎉 Optimal Chromatic Map Rendered"]
+    F -->|"No"| C
+    D -->|"Conflict (Violation)"| H["🔄 Backtrack: Try Alternative Color in Domain"]
+    H -->|"Domain Exhausted"| I["⬅️ Step Back to Previous Region Assignment"]
 ```
 
 ---
 
-## Execution Steps
+## 🚀 Key Features
 
-### 1. Install dependencies
+- **🧠 Backtracking Search Engine**:
+  - Implements recursive depth-first backtracking search to systematically explore the assignment space.
+  - Efficient constraint checking ensuring zero adjacent region collisions.
+- **🖥️ Dual Interface Implementations**:
+  1. **Interactive Python Tkinter GUI (`map_coloring_csp.py`)**:
+     - Visual node graph rendering, real-time adjacency linking, step-by-step color assignment visualizer, and dynamic color paletting.
+  2. **Zero-Install Web Canvas (`index.html`)**:
+     - Browser-native HTML5 Canvas drag-and-drop node graph with instant CSP solving and chromatic validation.
+- **📐 Graph Theoretical Bounds**:
+  - Computes chromatic lower bounds and maximum vertex degree bounds to guide heuristic selection.
+
+---
+
+## 📂 Repository Structure
+
 ```bash
-python -m pip install streamlit networkx matplotlib
+AI_ProblemSolving_-RA2411026050071-/
+├── map_coloring_csp.py     # Python Tkinter desktop GUI & CSP backtracking solver
+├── index.html              # Standalone web visualizer (interactive HTML5 Canvas)
+└── README.md
 ```
 
-### 2. Run the app
+---
+
+## 🛠️ Quickstart Guide
+
+### Option 1: Run Desktop Python GUI
+
 ```bash
-python -m streamlit run app.py
+# Clone the repository
+git clone https://github.com/Manukrishna1971/AI_ProblemSolving_-RA2411026050071-.git
+cd AI_ProblemSolving_-RA2411026050071-
+
+# Launch the Tkinter GUI (Tkinter is built into standard Python distributions)
+python map_coloring_csp.py
 ```
 
-### 3. Open in browser
+### Option 2: Run Web Interface
+
+Simply open `index.html` in any web browser, or host it locally:
+```bash
+# Using Python built-in HTTP server
+python -m http.server 8080
 ```
-http://localhost:8501
-```
+Open **[http://localhost:8080](http://localhost:8080)** to explore the live visual graph solver.
 
 ---
 
-## How to Use
-1. **Add Regions** — Type region names (e.g. A, B, C, D) and click Add
-2. **Define Adjacency** — Select two regions and click Link as Neighbors
-3. **Select Colors** — Choose colors from the multiselect dropdown
-4. **Check Smart Hint** — The app tells you the minimum colors needed
-5. **Solve CSP** — Click Solve and see the colored graph!
-6. **Load Example** — Click Load Example for a quick demo
+## 🧪 Example Execution
 
----
-
-## Sample Input
-```
-Regions: A, B, C, D
+**Sample Adjacency Matrix:**
+```text
+Regions: [North, West, Central, East, South]
 Adjacency:
-  A → B, C
-  B → A, C, D
-  C → A, B, D
-  D → B, C
-Colors available: Crimson, Indigo, Emerald, Marigold
+  North   → [West, Central, East]
+  West    → [North, Central, South]
+  Central → [North, West, East, South]
+  East    → [North, Central, South]
+  South   → [West, Central, East]
 ```
 
-## Sample Output
-```
-A → Crimson
-B → Indigo
-C → Emerald
-D → Crimson
-Colors used: 3 out of 4 selected
+**CSP Solution Output:**
+```text
+North   → 🟢 Green
+West    → 🔴 Red
+Central → 🔵 Blue
+East    → 🔴 Red
+South   → 🟢 Green
+Total Colors Used: 3 (Within planar 4-color bound)
+All Constraints Verified: True
 ```
 
 ---
 
-## Constraints Satisfied
-- ✅ No two adjacent regions have the same color
-- ✅ Minimum number of colors is used
-- ✅ User can select from 12 different colors dynamically
-- ✅ Smart hint tells user the minimum colors needed before solving
+## 📄 License & Attribution
 
----
-## AUTHOR
-| Name | Register Number |
-|------|----------------|
-| RONAV JS GOP | RA2411026050071|
-
-
----
-
-## Live Website
-https://ronavjsgop.github.io/AI_ProblemSolving_-RA2411026050071-/
+Distributed under the **MIT License**. Maintained by [Manukrishna](https://github.com/Manukrishna1971) and collaborators.
